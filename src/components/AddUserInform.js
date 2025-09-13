@@ -1,6 +1,6 @@
 import React from "react";
 
-class UserInform extends React.Component {
+class AddUserInform extends React.Component {
 
     state = {
         name: "Brian",
@@ -36,7 +36,11 @@ class UserInform extends React.Component {
 
     handleOnSubmit = (event) => {
         event.preventDefault()
-        alert("Hi")
+        this.props.handleAddUser({
+            id: Math.floor(Math.random() * 100 + 1) + " -random",
+            name: this.state.name,
+            age: this.state.age
+        })
     }
 
 
@@ -47,10 +51,10 @@ class UserInform extends React.Component {
                 <p>{this.state.message}</p>
                 <button onClick={this.handleOnClick}>Click me</button>
                 <button onMouseOver={this.handleOnHover}>Hover me</button>
+
                 <form onSubmit={(event) => this.handleOnSubmit(event)}>
                     <label>Your name: </label>
                     <input type="text" onChange={(event) => this.handleOnChange(event)}></input>
-                    <button>submmit</button>
 
                     <label>Your age: </label>
                     <input type="text" onChange={(event) => this.handleOnChangeAge(event)}></input>
@@ -58,9 +62,7 @@ class UserInform extends React.Component {
                 </form>
             </>
         );
-
-
     }
 }
 
-export default UserInform;
+export default AddUserInform;
