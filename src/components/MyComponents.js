@@ -2,6 +2,7 @@ import React from "react";
 import AddUserInform from "./AddUserInform";
 import DisplayInfor from "./DisplayInfor";
 
+
 class MyComponents extends React.Component {
 
     state = {
@@ -18,12 +19,21 @@ class MyComponents extends React.Component {
         })
     }
 
+    handleDeleteUser = (userId) => {
+        let listUsersClone = [...this.state.listUsers]
+        let newList = listUsersClone.filter((user) => user.id !== userId)
+
+        this.setState({
+            listUsers: newList
+        })
+    }
+
     render() {
         return (
             <>
                 <AddUserInform handleAddUser={this.handleAddUser}></AddUserInform>
                 <br></br>
-                <DisplayInfor listUsers={this.state.listUsers} />
+                <DisplayInfor listUsers={this.state.listUsers} handleDeleteUser={this.handleDeleteUser} />
             </>
         );
     }
