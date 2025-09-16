@@ -1,12 +1,29 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import './DisplayInfor.scss'
 import logo from '../logo.svg'
 
 const DisplayInfor = (props) => {
     const { listUsers } = props
+    const [isShowUser, setShowUser] = useState(true)
+
+    const handleShowHideUser = () => {
+        setShowUser(!isShowUser)
+    }
+
+    useEffect(() => {
+        if (listUsers.length === 0) {
+            alert("Delete All Users")
+        }
+        console.log("ComponentDidMount");
+
+    }, [listUsers])
+
     return (
         <div className="display-container">
-            {true &&
+            <span onClick={() => handleShowHideUser()}>
+                {isShowUser === true ? "Hide list users" : "Show list users"}
+            </span>
+            {isShowUser &&
                 <>
                     {listUsers.map((user) => {
                         return (

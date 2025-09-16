@@ -1,68 +1,54 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
-class AddUserInform extends React.Component {
+const AddUserInform = (props) => {
 
-    state = {
-        name: "Brian",
-        address: "Sydney",
-        message: "",
-        age: 18
+    const [name, setName] = useState("Brian");
+    const [address, setAddress] = useState("Sydney");
+    const [message, setMessage] = useState("");
+    const [age, setAge] = useState(18);
+
+    const handleOnClick = () => {
+        setName("Gib");
+        setAge(Math.floor(Math.random() * 100 + 1))
     }
 
-    handleOnClick = () => {
-        this.setState({
-            name: "Gib",
-            age: Math.floor(Math.random() * 100 + 1)
-        })
+    const handleOnHover = () => {
+        setMessage("Hi there!")
     }
 
-    handleOnHover = () => {
-        this.setState({
-            message: "Hi there!"
-        })
+    const handleOnChange = (event) => {
+        setName(event.target.value)
     }
 
-    handleOnChange = (event) => {
-        this.setState({
-            name: event.target.value
-        })
+    const handleOnChangeAge = (event) => {
+        setAge(event.target.value)
     }
 
-    handleOnChangeAge = (event) => {
-        this.setState({
-            age: event.target.value
-        })
-    }
-
-    handleOnSubmit = (event) => {
+    const handleOnSubmit = (event) => {
         event.preventDefault()
-        this.props.handleAddUser({
+        props.handleAddUser({
             id: Math.floor(Math.random() * 100 + 1) + " -random",
-            name: this.state.name,
-            age: this.state.age
+            name: name,
+            age: age
         })
     }
+    return (
+        <>
+            <div>My name is {name}, I live in {address}, I'm {age} years olds</div>
+            <p>{message}</p>
+            <button onClick={() => handleOnClick()}>Click me</button>
+            <button onMouseOver={() => handleOnHover()}>Hover me</button>
 
+            <form onSubmit={(event) => handleOnSubmit(event)}>
+                <label>Your name: </label>
+                <input type="text" onChange={(event) => handleOnChange(event)}></input>
 
-    render() {
-        return (
-            <>
-                <div>My name is {this.state.name}, I live in {this.state.address}, I'm {this.state.age} years olds</div>
-                <p>{this.state.message}</p>
-                <button onClick={this.handleOnClick}>Click me</button>
-                <button onMouseOver={this.handleOnHover}>Hover me</button>
-
-                <form onSubmit={(event) => this.handleOnSubmit(event)}>
-                    <label>Your name: </label>
-                    <input type="text" onChange={(event) => this.handleOnChange(event)}></input>
-
-                    <label>Your age: </label>
-                    <input type="text" onChange={(event) => this.handleOnChangeAge(event)}></input>
-                    <button>submmit</button>
-                </form>
-            </>
-        );
-    }
+                <label>Your age: </label>
+                <input type="text" onChange={(event) => handleOnChangeAge(event)}></input>
+                <button>submmit</button>
+            </form>
+        </>
+    );
 }
 
 export default AddUserInform;
