@@ -1,11 +1,21 @@
 import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import { FaRegClock } from 'react-icons/fa';
 import { FcPlus } from "react-icons/fc";
-const ModalCreateUser = () => {
-    const [show, setShow] = useState(false);
+import axios from 'axios';
+const ModalCreateUser = (props) => {
+    const { show, setShow } = props
 
-    const handleClose = () => setShow(false);
+    const handleClose = () => {
+        setShow(false)
+        setEmail("");
+        setPassword("");
+        setName("");
+        setRole("USER");
+        setImage("");
+        setPreviewImage("");
+    };
     const handleShow = () => setShow(true);
 
     const [email, setEmail] = useState("");
@@ -20,12 +30,20 @@ const ModalCreateUser = () => {
         setPreviewImage(URL.createObjectURL(event.target.files[0]))
     }
 
+    const handleSubmitCreateUser = async () => {
+
+        const data = new FormData();
+        data.append("email", email)
+        data.append("password", password)
+        data.append("username", name)
+        data.append("role", role)
+        data.append("userImage", image)
+
+        let res = await axios.post("http://localhost:8081/api/v1/participant", data);
+    }
+
     return (
         <>
-            <Button variant="primary" onClick={handleShow}>
-                Launch demo modal
-            </Button>
-
             <Modal size="xl" show={show} onHide={handleClose} backdrop="static" className='modal-add-user'>
                 <Modal.Header closeButton>
                     <Modal.Title>Add new user</Modal.Title>
@@ -77,7 +95,7 @@ const ModalCreateUser = () => {
                     <Button variant="secondary" onClick={handleClose}>
                         Close
                     </Button>
-                    <Button variant="primary" onClick={handleClose}>
+                    <Button variant="primary" onClick={() => handleSubmitCreateUser()}>
                         Save
                     </Button>
                 </Modal.Footer>
