@@ -5,7 +5,7 @@ import { FaRegClock } from 'react-icons/fa';
 import { FcPlus } from "react-icons/fc";
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { postCreateNewUser } from '../../../service/apiService';
+import { putUpdateUser } from '../../../service/apiService';
 import _ from 'lodash';
 const ModalUpdateUser = (props) => {
     const { show, setShow, dataUpdate } = props
@@ -18,6 +18,7 @@ const ModalUpdateUser = (props) => {
         setRole("USER");
         setImage("");
         setPreviewImage("");
+        props.resetDataUpdate()
     };
     const handleShow = () => setShow(true);
 
@@ -60,11 +61,7 @@ const ModalUpdateUser = (props) => {
             toast.error("Invalid email")
             return
         }
-        if (!password) {
-            toast.error("Invalid password")
-            return
-        }
-        let data = await postCreateNewUser(email, password, name, role, image);
+        let data = await putUpdateUser(dataUpdate.id, name, role, image);
         console.log(">>>Component", data);
 
         if (data && data.EC === 0) {
