@@ -4,12 +4,15 @@ import { FcPlus } from "react-icons/fc";
 import { useState } from 'react';
 import TableUser from "./TableUser";
 import { useEffect } from 'react';
-import { getAllUsers } from '../../../service/apiService';
+import { getAllUsers, getListUserWithPaginate } from '../../../service/apiService';
 import ModalUpdateUser from "./ModalUpdateUser";
 import ModalViewUser from "./ModalViewUser";
 import ModalDeleteUser from "./ModalDeleteUser";
+import TableUserPaginate from "./TableUserPaginate";
 const ManageUser = (props) => {
-
+    const LIMIT_USER = 3;
+    const [currentPage, setCurrentPage] = useState(1)
+    const [pageCount, setPageCount] = useState(0)
     const [showModalCreateUser, setShoModalCreateUser] = useState(false);
     const [showModalUpdateUser, setShowModalUpdateUser] = useState(false);
     const [showViewUser, setShowViewUser] = useState(false)
@@ -19,13 +22,22 @@ const ManageUser = (props) => {
     const [dataDelete, setDataDelete] = useState({});
 
     useEffect(() => {
-        fetchListUsers()
+        fetchListUsersWithPaginate(1)
     }, [])
 
     const fetchListUsers = async () => {
         let res = await getAllUsers()
         if (res.EC === 0) {
             setListUsers(res.DT)
+        }
+    }
+
+    const fetchListUsersWithPaginate = async (page) => {
+        let res = await getListUserWithPaginate(page, LIMIT_USER)
+
+        if (res.EC === 0) {
+            setListUsers(res.DT.users)
+            setPageCount(res.DT.totalPages)
         }
 
     }
@@ -64,17 +76,31 @@ const ManageUser = (props) => {
                     </button>
                 </div>
                 <div className="table-users-container">
-                    <TableUser
+                    {/* <TableUser
                         listUsers={listUsers}
                         hanldeClickBtnUpdate={hanldeClickBtnUpdate}
                         handleClickBtnView={handleClickBtnView}
                         handleClickBtnDelete={handleClickBtnDelete}
+                    /> */}
+
+                    <TableUserPaginate
+                        listUsers={listUsers}
+                        hanldeClickBtnUpdate={hanldeClickBtnUpdate}
+                        handleClickBtnView={handleClickBtnView}
+                        handleClickBtnDelete={handleClickBtnDelete}
+                        fetchListUsersWithPaginate={fetchListUsersWithPaginate}
+                        pageCount={pageCount}
+                        currentPage={currentPage}
+                        setCurrentPage={setCurrentPage}
                     />
                 </div>
                 <ModalCreateUser
                     show={showModalCreateUser}
                     setShow={setShoModalCreateUser}
                     fetchListUsers={fetchListUsers}
+                    fetchListUsersWithPaginate={fetchListUsersWithPaginate}
+                    currentPage={currentPage}
+                    setCurrentPage={setCurrentPage}
                 />
 
                 <ModalUpdateUser
@@ -83,6 +109,9 @@ const ManageUser = (props) => {
                     dataUpdate={dataUpdate}
                     fetchListUsers={fetchListUsers}
                     resetDataUpdate={resetDataUpdate}
+                    fetchListUsersWithPaginate={fetchListUsersWithPaginate}
+                    currentPage={currentPage}
+                    setCurrentPage={setCurrentPage}
                 />
 
                 <ModalViewUser
@@ -98,6 +127,9 @@ const ManageUser = (props) => {
                     setShow={setShowDeleteUser}
                     dataDelete={dataDelete}
                     fetchListUsers={fetchListUsers}
+                    fetchListUsersWithPaginate={fetchListUsersWithPaginate}
+                    currentPage={currentPage}
+                    setCurrentPage={setCurrentPage}
                 />
             </div>
         </div>
