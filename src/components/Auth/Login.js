@@ -1,16 +1,32 @@
 import { useState } from 'react'
 import './Login.scss'
+import { useNavigate } from 'react-router-dom'
+import { postLogin } from '../../service/apiService'
+import { toast } from 'react-toastify';
 
 const Login = () => {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
-    const handleLogin = () => {
-        alert(123)
+    const handleLogin = async () => {
+        //validate 
+
+        //submit data
+        let data = await postLogin(email, password)
+        if (data && data.EC === 0) {
+            toast.success(data.EM);
+            navigate("/")
+        } else if (data && data.EC !== 0) {
+            toast.error(data.EM)
+        }
+
+
     }
+    const navigate = useNavigate()
     return (
         <div className='login-container'>
             <div className='header'>
-                Don't have account yet
+                <span>Don't have account yet?</span>
+                <button>Sign Up</button>
             </div>
             <div className='title col-4 mx-auto'>
                 Brian Becoming Software Engineering
@@ -32,6 +48,9 @@ const Login = () => {
                 <span className='forgot-password'>Forget your password ?</span>
                 <div>
                     <button onClick={() => handleLogin()} className='btn-submit'>Login to Brian</button>
+                </div>
+                <div className='text-center' >
+                    <span className='back' onClick={() => navigate('/')}> &lt;&lt; Go to Homepage</span>
                 </div>
             </div>
 
