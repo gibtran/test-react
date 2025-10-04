@@ -26,7 +26,7 @@ const Login = () => {
         <div className='login-container'>
             <div className='header'>
                 <span>Don't have account yet?</span>
-                <button>Sign Up</button>
+                <button onClick={() => navigate('/signup')}>Sign Up</button>
             </div>
             <div className='title col-4 mx-auto'>
                 Brian Becoming Software Engineering

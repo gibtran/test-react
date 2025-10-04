@@ -15,6 +15,7 @@ const TableUserPaginate = (props) => {
 
     useEffect(() => {
         fetchListUsersWithPaginate(currentPage);
+        console.log(currentPage);
     }, [currentPage]);
 
     return (
